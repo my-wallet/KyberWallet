@@ -61,6 +61,14 @@ const TransactionLoadingView = (props) => {
     )
   }
 
+  var displayRoundingNumber = (amount) => {
+    var roundingAmount = roundingNumber(amount)
+    if (isNaN(roundingAmount)){
+      return roundingAmount
+    }
+    return +roundingAmount
+  }
+
   var handleAnalyze = (e) => {
     props.analyze.action(e)
     // props.toogleModal()
@@ -118,15 +126,17 @@ const TransactionLoadingView = (props) => {
                 <li class={props.status}>
                   <h4 class="text-success font-w-b">
                     {props.type === "exchange" && 
-                      (props.translate("transaction.success_ex_msg", {source: props.balanceInfo.sourceSymbol, dest: props.balanceInfo.destSymbol}) 
-                      ||`Successfully exchanged from ${props.balanceInfo.sourceSymbol} to ${props.balanceInfo.destSymbol}`)
+                      (props.translate("transaction.success_ex_msg", 
+                      {sourceAmount: displayRoundingNumber(props.balanceInfo.sourceAmount), sourceSymbol: props.balanceInfo.sourceSymbol, 
+                        destAmount: displayRoundingNumber(props.balanceInfo.destAmount), destSymbol: props.balanceInfo.destSymbol}) 
+                      ||`Successfully exchanged from </br> ${displayRoundingNumber(props.balanceInfo.sourceAmount)} ${props.balanceInfo.sourceSymbol} to ${displayRoundingNumber(props.balanceInfo.destAmount)} ${props.balanceInfo.destSymbol}`)
                     }
                     {props.type === "transfer" && 
-                      (props.translate("transaction.success_tx_msg", {token: props.balanceInfo.tokenSymbol, address: props.address}) ||
-                      `Successfully transferred ${props.balanceInfo.tokenSymbol} to ${props.address}`)
+                      (props.translate("transaction.success_tx_msg", {amount: displayRoundingNumber(props.balanceInfo.amount), token: props.balanceInfo.tokenSymbol, address: props.address}) ||
+                      `Successfully transferred </br> ${displayRoundingNumber(props.balanceInfo.amount)} ${props.balanceInfo.tokenSymbol} to ${props.address}`)
                     }
                   </h4>
-                  {props.type === "exchange" &&
+                  {/* {props.type === "exchange" &&
                     <ul class="address-balances text-white">
                       <li class="text-left">
                         <span class="name">{props.balanceInfo.sourceSymbol}</span>
@@ -141,8 +151,8 @@ const TransactionLoadingView = (props) => {
                         <span class="balance font-w-b" title={props.balanceInfo.destAmount.nextValue}>{roundingNumber(props.balanceInfo.destAmount.nextValue)}</span>
                       </li>
                     </ul>
-                  }
-                  {props.type === "transfer" &&
+                  } */}
+                  {/* {props.type === "transfer" &&
                     <ul class="address-balances text-white">
                       <li class="text-left">
                         <span class="name">{props.balanceInfo.tokenSymbol}</span>
@@ -151,7 +161,7 @@ const TransactionLoadingView = (props) => {
                         <span class="balance font-w-b" title={props.balanceInfo.amount.next}>{roundingNumber(props.balanceInfo.amount.next)}</span>
                       </li>
                     </ul>
-                  }
+                  } */}
                 </li>
               }
               {props.status === "failed" &&
